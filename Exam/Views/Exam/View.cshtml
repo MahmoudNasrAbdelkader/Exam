@@ -199,7 +199,68 @@
 						<div class="tab-pane fade" id="contact7" role="tabpanel">
 							<div class="pd-20">
 
+								@if (Model.exams is not null && Model.exams.Count() > 0)
+								{
 
+									<div class="card-box mb-30">
+										<div class="pd-20">
+											<h4 class="text-blue h4">Exams</h4>
+
+										</div>
+										<div class="pb-20">
+											<table class="table hover multiple-select-row data-table-export nowrap">
+												<thead>
+													<tr>
+														<th class="table-plus datatable-nosort">#</th>
+														<th>First Name</th>
+														<th>Last Name</th>
+														<th>User Name</th>
+														<th>Start DT</th>
+														<th>End DT</th>
+														<th></th>
+													</tr>
+												</thead>
+												<tbody>
+													@foreach (var item in Model.exams)
+													{
+
+														<tr>
+															<td class="table-plus">
+																@(counter2++)
+															</td>
+															<td>
+																@item.FirstName
+															</td>
+
+															<td>
+																@item.LastName
+															</td>
+															<td>
+																@item.UserName
+															</td>
+															<td>
+																@item.CreateDT.ToString("dd/MM/yyyy HH:mm tt")
+															</td>
+															<td>
+																@item.EndDT?.ToString("dd/MM/yyyy HH:mm tt")
+															</td>
+															<td>
+																<a style="cursor:pointer" class="p-1" asp-action="DisplayExamResultsStudent" asp-controller="Exam" asp-route-UserExamId="@item.UserExamId" asp-route-UserId="@item.UserId">
+																	<i class="fa fa-eye text-primary fa-lg" aria-hidden="true" title="view"></i>
+
+																</a>
+
+
+															</td>
+														</tr>
+													}
+												</tbody>
+											</table>
+										</div>
+									</div>
+
+
+								}
 
 
 							</div>

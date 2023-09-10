@@ -46,12 +46,31 @@ namespace Exam.Repository
 
 		public ExamDetailsViewModel GetDetailsById(int id)
 		{
-			var Exam = _dbContext.Exams.Include("Questions.QuestionType").FirstOrDefault(c=>c.ExamId == id);
-			ExamDetailsViewModel model = new ExamDetailsViewModel() { 
-              Exam = Exam,
-              questions = Exam.Questions.Where(c=>!c.Deleted).OrderBy(c=>c.Text).Select(c=> new QuestionIndexViewModel (){ QuestionId = c.QuestionId ,Text=c.Text,TypeName =c.QuestionType.Text}).ToList(),
-            };
-            return model;
+			var Exam = _dbContext.Exams.Include("Questions.QuestionType").FirstOrDefault(c => c.ExamId == id);
+
+			ExamDetailsViewModel model = new ExamDetailsViewModel()
+			{
+				Exam = Exam,
+				questions = Exam.Questions.Where(c => !c.Deleted).OrderBy(c => c.Text).Select(c => new QuestionIndexViewModel() { QuestionId = c.QuestionId, Text = c.Text, TypeName = c.QuestionType.Text }).ToList(),
+			};
+			var users = _dbContext.Users.ToList();
+			var exams = _dbContext.UserExams.Where(c => c.ExamId == id).Include(C => C.Exam).Include("UserAnswers.Question.QuestionType").ToList()
+				.Select(c => new ExamResultsStudentViewModel()
+				{
+					CreateDT = c.CreateDT,
+					EndDT = c.EndDT,
+					ExamName = c.Exam.Name,
+					UserExamId = c.UserExamId,
+					FirstName = users.FirstOrDefault(x => x.Id == c.ApplicationUserId)?.FirstName,
+					LastName = users.FirstOrDefault(x => x.Id == c.ApplicationUserId)?.SeconedName,
+					UserName = users.FirstOrDefault(x => x.Id == c.ApplicationUserId)?.UserName,
+					UserId = users.FirstOrDefault(x => x.Id == c.ApplicationUserId)?.Id,
+
+				}).ToList();
+			model.exams = exams;
+
+
+			return model;
 		}
 
 		public UserExamViewModel StartExam(int ExamId, string UserId)

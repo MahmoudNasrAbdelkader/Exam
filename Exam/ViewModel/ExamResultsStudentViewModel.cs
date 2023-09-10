@@ -2,7 +2,7 @@
 {
 	public class ExamResultsStudentViewModel
 	{
-        public string UserId { get; set; }
+        public string? UserId { get; set; }
 		public int UserExamId { get; set; }
 		public string? FirstName { get; set; }
 		public string? LastName { get; set; }

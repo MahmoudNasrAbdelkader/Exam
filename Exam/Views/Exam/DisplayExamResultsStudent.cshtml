@@ -1,8 +1,8 @@
 ﻿@model Exam.ViewModel.ExamResultsStudentViewModel
 @{
 	ViewData["Title"] = "View- Exam Result";
-	
 
+	int counter = 1;
 }
 @section css{
 
@@ -54,14 +54,129 @@
 			</div>
 			<div class="col-md-6 col-sm-12 text-right">
 				<div class="dropdown">
-
-					
 				</div>
 			</div>
 		</div>
 	</div>
 
-	
+	<div class="pd-20">
+		<div class="row">
+			<div class="col-md-2 col-sm-12">
+				<p class="h6 text-blue">Exam Name</p>
+				<p>@Model.ExamName</p>
+
+
+			</div>
+			<div class="col-md-2 col-sm-12">
+
+				<p class="h6 text-blue">Create DT</p>
+				<p>  @Model.CreateDT.ToString("dd/MM/yyyy HH:mm tt")</p>
+
+
+
+			</div>
+			<div class="col-md-2 col-sm-12">
+
+				<p class="h6 text-blue">Create DT</p>
+				<p>  @Model.EndDT?.ToString("dd/MM/yyyy HH:mm tt")</p>
+
+
+
+			</div>
+
+
+		</div>
+		<div class="row">
+			<div class="col-md-2 col-sm-12">
+				<p class="h6 text-blue">Username</p>
+				<p>@Model.UserName</p>
+
+
+			</div>
+			<div class="col-md-2 col-sm-12">
+
+				<p class="h6 text-blue">First Name</p>
+				<p>  @Model.FirstName</p>
+
+
+
+			</div>
+			<div class="col-md-2 col-sm-12">
+
+				<p class="h6 text-blue">Last Name</p>
+				<p>  @Model.LastName</p>
+
+
+
+			</div>
+
+
+		</div>
+
+
+	</div>
+
+	<div class="pd-20">
+		@if (Model.QuestionsResults is not null && Model.QuestionsResults.Count() > 0)
+		{
+
+			<div class="card-box mb-30">
+				<div class="pd-20">
+					<h4 class="text-blue h4">Questions</h4>
+
+				</div>
+				<div class="pb-20">
+					<table class="table hover multiple-select-row data-table-export nowrap">
+						<thead>
+							<tr>
+								<th class="table-plus datatable-nosort">#</th>
+								<th>Question</th>
+								<th>Student Answer</th>
+								<th>Correct Answer</th>
+								<th>Is User Answered</th>
+								<th>Is Correct</th>
+
+							</tr>
+						</thead>
+						<tbody>
+							@foreach (var item in Model.QuestionsResults)
+							{
+
+								<tr>
+									<td class="table-plus">
+										@(counter++)
+									</td>
+									<td>
+										@item.Question
+									</td>
+
+									<td>
+										@item.UserAnswer
+									</td>
+
+
+									<td>
+										@item.CorrectAnswer
+									</td>
+									<td>
+										@item.IsUserAnswered
+									</td>
+									<td>
+										@item.IsAnswerCorrect
+									</td>
+								</tr>
+							}
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+
+		}
+
+
+	</div>
+
 </div>
 
 
