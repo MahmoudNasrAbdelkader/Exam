@@ -1,0 +1,104 @@
+﻿@model Exam.ViewModel.ExamResultsStudentViewModel
+@{
+	ViewData["Title"] = "View- Exam Result";
+	
+
+}
+@section css{
+
+	<link rel="stylesheet" type="text/css" href="~/src/plugins/datatables/css/responsive.bootstrap4.min.css">
+	<link rel="stylesheet" type="text/css" href="~/src/plugins/datatables/css/dataTables.bootstrap4.min.css">
+	<style>
+		#DataTables_Table_0_filter, #DataTables_Table_0_wrapper > div.dt-buttons.btn-group.flex-wrap {
+			display: inline;
+			float: right;
+			margin: 10px;
+		}
+
+		#DataTables_Table_0_wrapper > div.dt-buttons.btn-group.flex-wrap {
+			display: inline;
+			float: left;
+			margin: 10px;
+		}
+
+		#profile7 > div > div:nth-child(3) > div.pb-20 > form > div > div:nth-child(1) > div > span {
+			display: block;
+			width: auto;
+		}
+	</style>
+	<link rel="stylesheet" type="text/css" href="~/src/plugins/fancybox/dist/jquery.fancybox.css">
+	<!-- switchery css -->
+	<link rel="stylesheet" type="text/css" href="~/src/plugins/switchery/switchery.min.css">
+	<!-- bootstrap-tagsinput css -->
+	<link rel="stylesheet" type="text/css" href="~/src/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css">
+	<!-- bootstrap-touchspin css -->
+	<link rel="stylesheet" type="text/css" href="~/src/plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.css">
+	<link href="~/src/plugins/sweetalert2/sa2.css" rel="stylesheet" />
+
+
+
+
+}
+<div>
+	<div class="page-header">
+		<div class="row">
+			<div class="col-md-6 col-sm-12">
+				<div class="title">
+					<nav aria-label="breadcrumb" role="navigation">
+						<ol class="breadcrumb">
+							<li class="breadcrumb-item active" aria-current="page">@Model.ExamName</li>
+						</ol>
+					</nav>
+				</div>
+
+			</div>
+			<div class="col-md-6 col-sm-12 text-right">
+				<div class="dropdown">
+
+					
+				</div>
+			</div>
+		</div>
+	</div>
+
+	
+</div>
+
+
+@section Scripts{
+	<script>
+		$(document).ready(function () {
+			// document.getElementById("aMainExams").click();
+			// ToggleColorInDashboard("aExam");
+
+			
+
+		});
+
+	</script>
+	<script src="~/src/plugins/datatables/js/jquery.dataTables.min.js"></script>
+	<script src="~/src/plugins/datatables/js/dataTables.bootstrap4.min.js"></script>
+	<script src="~/src/plugins/datatables/js/dataTables.responsive.min.js"></script>
+	<script src="~/src/plugins/datatables/js/responsive.bootstrap4.min.js"></script>
+	<!-- buttons for Export datatable -->
+	<script src="~/src/plugins/datatables/js/dataTables.buttons.min.js"></script>
+	<script src="~/src/plugins/datatables/js/buttons.bootstrap4.min.js"></script>
+	<script src="~/src/plugins/datatables/js/buttons.print.min.js"></script>
+	<script src="~/src/plugins/datatables/js/buttons.html5.min.js"></script>
+	<script src="~/src/plugins/datatables/js/buttons.flash.min.js"></script>
+	<script src="~/src/plugins/datatables/js/pdfmake.min.js"></script>
+	<script src="~/src/plugins/datatables/js/vfs_fonts.js"></script>
+	<!-- Datatable Setting js -->
+	<script src="~/vendors/scripts/datatable-setting.js"></script>
+	<script src="~/src/plugins/fancybox/dist/jquery.fancybox.js"></script>
+	<script src="~/src/plugins/sweetalert2/sajs.js"></script>
+
+	<!-- switchery js -->
+	<script src="~/src/plugins/switchery/switchery.min.js"></script>
+	<!-- bootstrap-tagsinput js -->
+	<script src="~/src/plugins/bootstrap-tagsinput/bootstrap-tagsinput.js"></script>
+	<!-- bootstrap-touchspin js -->
+	<script src="~/src/plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.js"></script>
+	<script src="~/vendors/scripts/advanced-components.js"></script>
+
+}

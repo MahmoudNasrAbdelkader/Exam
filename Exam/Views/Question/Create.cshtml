@@ -1,0 +1,397 @@
+﻿@model Exam.ViewModel.QuestionViewModel
+@{
+	if (Model.QuestionId > 0)
+	{
+		ViewData["Title"] = "Edit - Question";
+	}
+	else
+	{
+		ViewData["Title"] = "Create - Question";
+	}
+	Layout = "_LayoutExam";
+
+}
+@section css{
+	<!-- switchery css -->
+	<link rel="stylesheet" type="text/css" href="~/src/plugins/switchery/switchery.min.css">
+	<!-- bootstrap-tagsinput css -->
+	<link rel="stylesheet" type="text/css" href="~/src/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css">
+	<!-- bootstrap-touchspin css -->
+	<link rel="stylesheet" type="text/css" href="~/src/plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.css">
+}
+
+<div>
+	<div class="page-header">
+		<div class="row">
+			<div class="col-md-6 col-sm-12">
+				<div class="title">
+					<h4>@(Model.QuestionId > 0 ? "Edit" : "Create") Question</h4>
+				</div>
+				<nav aria-label="breadcrumb" role="navigation">
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a asp-action="View" asp-controller="Exam" asp-route-ExamId="@Model.ExamId">@Model.ExamName</a></li>
+						<li class="breadcrumb-item active" aria-current="page">@(Model.ExamId > 0 ? "Edit" : "Create") Question</li>
+					</ol>
+				</nav>
+			</div>
+			<div class="col-md-6 col-sm-12 text-right">
+				<div class="dropdown">
+					
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="pd-20 card-box mb-30">
+		<div class="clearfix">
+			<div class="pull-left">
+				
+			</div>
+			<div class="pull-right">
+				
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="form-control-label">Type</label>
+			<select class=" form-control" id="selType" asp-items="Model.QuestionTypes" onchange="changeform(this.value)" style="width: 39%; height: 38px;">
+				<option value="-1"> - select - </option>
+			</select>
+			<hr />
+			<div id="divMultipleChoice">
+				<form asp-action="CreateMultipleChoice" method="post">
+					<input type="hidden"  asp-for="ExamId"/>
+					<input type="hidden" asp-for="QuestionId" />
+
+					<div class="row">
+						<div class="col-md-12 col-sm-12">
+							<div class="form-group">
+								<label class="form-control-label">Question Text</label>
+								<input name="questionText" id="questionText" value="@(Model.QuestionId > 0 && Model.Question.QuestionType.Text.Contains("Multiple Choice") ? Model.Question.Text:string.Empty)" type="text" class="form-control" required>
+
+							</div>
+							
+						</div>
+
+					</div>
+					<div class="row">
+						<div class="col-md-9">
+							<div class="form-group">
+								<label class="form-control-label">Choice A</label>
+								<input name="choice1" id="choice1" type="text" class="form-control" value="@(Model.QuestionId > 0 && Model.Question.QuestionType.Text.Contains("Multiple Choice") ? Model.Question.QuestionChoose[0].Text:string.Empty)" required>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">	
+								<label class="form-control-label">Correct answer</label>
+								<input type="radio" name="choice" value="choice1" class="form-control" style=" width: 10%;" @(Model.QuestionId > 0 && Model.Question.QuestionType.Text.Contains("Multiple Choice") && Model.Question.QuestionChoose[0].IsTrue  ? "checked":string.Empty) required>
+							</div>
+						</div>
+
+					</div>
+					<div class="row">
+						<div class="col-md-9">
+							<div class="form-group">
+								<label class="form-control-label">Choice B</label>
+								<input name="choice2" id="choice2" type="text" class="form-control" value="@(Model.QuestionId > 0 && Model.Question.QuestionType.Text.Contains("Multiple Choice") ? Model.Question.QuestionChoose[1].Text:string.Empty)" required>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+								<input type="radio" name="choice" value="choice2" class="form-control" style="margin-top: 10%;width: 10%;" @(Model.QuestionId > 0 && Model.Question.QuestionType.Text.Contains("Multiple Choice") && Model.Question.QuestionChoose[1].IsTrue ? "checked" : string.Empty)>
+							</div>
+						</div>
+
+					</div>
+					<div class="row">
+						<div class="col-md-9">
+							<div class="form-group">
+								<label class="form-control-label">Choice C</label>
+								<input name="choice3" id="choice3" type="text" class="form-control" value="@(Model.QuestionId > 0 && Model.Question.QuestionType.Text.Contains("Multiple Choice") ? Model.Question.QuestionChoose[2].Text:string.Empty)" required>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+								<input type="radio" name="choice" value="choice3" class="form-control" style="margin-top: 10%; width: 10%;" @(Model.QuestionId > 0 && Model.Question.QuestionType.Text.Contains("Multiple Choice") && Model.Question.QuestionChoose[2].IsTrue ? "checked" : string.Empty)>
+							</div>
+						</div>
+
+					</div>
+					<div class="row">
+						<div class="col-md-9">
+							<div class="form-group">
+								<label class="form-control-label">Choice D</label>
+								<input name="choice4" id="choice4" type="text" class="form-control" value="@(Model.QuestionId > 0 && Model.Question.QuestionType.Text.Contains("Multiple Choice") ? Model.Question.QuestionChoose[3].Text:string.Empty)" required>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+								<input type="radio" name="choice" value="choice4" class="form-control" style="margin-top: 10%;width: 10%;" @(Model.QuestionId > 0 && Model.Question.QuestionType.Text.Contains("Multiple Choice") && Model.Question.QuestionChoose[3].IsTrue ? "checked" : string.Empty)>
+							</div>
+						</div>
+
+					</div>
+					<div class="form-group text-right">
+						<input type="submit" class="btn btn-primary" onclick="checkifRadoihasValue()" style="width: 150px;" value="@(Model.QuestionId > 0 ? "Update" : "Create")" />
+					</div>
+				
+				</form>
+			</div>
+			<div id="divTrue/False">
+				<form asp-action="CreateTF" method="post">
+					<input type="hidden" asp-for="ExamId" />
+					<input type="hidden" asp-for="QuestionId" />
+
+					<div class="row">
+						<div class="col-md-12 col-sm-12">
+							<div class="form-group">
+								<label class="form-control-label">Question Text</label>
+								<input name="questionText" id="questionTextTF" value="@(Model.QuestionId > 0 && Model.Question.QuestionType.Text.Contains("True/False") ? Model.Question.Text:string.Empty)" type="text" class="form-control" required>
+
+							</div>
+
+						</div>
+
+					</div>
+					<div class="row">
+						<div class="col-md-9">
+							<div class="form-group">
+								<input type="radio" id="ptTrue" name="inputtf" value="True" @(Model.QuestionId > 0 && Model.Question.QuestionType.Text.Contains("True/False") && Model.Question.CorrectAnswer == "True" ? "checked" : string.Empty) required>True
+								<input type="radio" id="ptFalse" name="inputtf" value="False" @(Model.QuestionId > 0 && Model.Question.QuestionType.Text.Contains("True/False") && Model.Question.CorrectAnswer == "False" ? "checked" : string.Empty)>False
+							</div>
+						</div>
+	
+
+					</div>
+					
+					<div class="form-group text-right">
+						<input type="submit" class="btn btn-primary" onclick="checkifRadoihasValueTF()" style="width: 150px;" value="@(Model.QuestionId > 0 ? "Update" : "Create")" />
+					</div>
+
+				</form>
+
+			</div>
+			<div id="divFill">
+				<form asp-action="CreateFillBlank" method="post">
+					<input type="hidden" asp-for="ExamId" />
+					<input type="hidden" asp-for="QuestionId" />
+
+					<div class="row">
+						<div class="col-md-12 col-sm-12">
+							<div class="form-group">
+								<label class="form-control-label">Question Text <span class="text-danger">(The question must contain %% because it will replace these %% with a blank space when the question is shown to the student)</span> </label>
+								<input name="questionText" id="questionTextFillBlank" value="@(Model.QuestionId > 0 && Model.Question.QuestionType.Text.Contains("Fill in the blank") ? Model.Question.Text:string.Empty)" type="text" class="form-control" required>
+
+							</div>
+
+						</div>
+
+					</div>
+					<div class="row">
+						<div class="col-md-9">
+							<div class="form-group">
+								<label class="form-control-label">Correct answert</label>
+								<input name="correctAnswert" id="correctAnswert" type="text" value="@(Model.QuestionId > 0 && Model.Question.QuestionType.Text.Contains("Fill in the blank")  ? Model.Question.CorrectAnswer : string.Empty)" class="form-control" required>
+							</div>
+						</div>
+
+
+					</div>
+
+					<div class="form-group text-right">
+						<input type="submit" class="btn btn-primary" onclick="checkValueFillBlank()" style="width: 150px;" value="@(Model.QuestionId > 0 ? "Update" : "Create")" />
+					</div>
+
+				</form>
+
+			</div>
+			<div id="divEssay">
+				<form asp-action="CreateEssay" method="post">
+					<input type="hidden" asp-for="ExamId" />
+					<input type="hidden" asp-for="QuestionId" />
+
+					<div class="row">
+						<div class="col-md-12 col-sm-12">
+							<div class="form-group">
+								<label class="form-control-label">Question Text </label>
+								<input name="questionText" id="questionTextEssay" value="@(Model.QuestionId > 0 && Model.Question.QuestionType.Text.Contains("Essay") ? Model.Question.Text : string.Empty)" type="text" class="form-control" required>
+
+							</div>
+
+						</div>
+
+					</div>
+					<div class="row">
+						<div class="col-md-9">
+							<div class="form-group">
+								<label class="form-control-label">Correct answert</label>
+								<input name="correctAnswert" id="correctAnswertEssay" type="text" value="@(Model.QuestionId > 0 && Model.Question.QuestionType.Text.Contains("Essay")  ? Model.Question.CorrectAnswer : string.Empty)" class="form-control" required>
+							</div>
+						</div>
+
+
+					</div>
+
+					<div class="form-group text-right">
+						<input type="submit" class="btn btn-primary" onclick="checkValueEssay()" style="width: 150px;" value="@(Model.QuestionId > 0 ? "Update" : "Create")" />
+					</div>
+
+				</form>
+
+			</div>
+
+		</div>
+		<form asp-action="@(Model.QuestionId > 0 ? "Edit":"Create" )" method="post">
+			
+
+		</form>
+
+	</div>
+</div>
+
+@section Scripts{
+	<script>
+
+
+		$(document).ready(function () {
+			document.getElementById("aMainExams").click();
+			ToggleColorInDashboard("aExam");
+			document.getElementById("divMultipleChoice").style.display = "none";
+			document.getElementById("divTrue/False").style.display = "none";
+			document.getElementById("divFill").style.display = "none";
+			document.getElementById("divEssay").style.display = "none";
+			changeform("@Model.Question?.QuestionType?.Text");
+
+		});
+		
+		function changeform(typeid){
+			if (typeid == "Multiple Choice") {
+				document.getElementById("divMultipleChoice").style.display = "block";
+				document.getElementById("divTrue/False").style.display = "none";
+				document.getElementById("divFill").style.display = "none";
+				document.getElementById("divEssay").style.display = "none";
+			} else if (typeid == "True/False") {
+				document.getElementById("divMultipleChoice").style.display = "none";
+				document.getElementById("divTrue/False").style.display = "block";
+				document.getElementById("divFill").style.display = "none";
+				document.getElementById("divEssay").style.display = "none";
+			} else if (typeid == "Fill in the blank") {
+				document.getElementById("divMultipleChoice").style.display = "none";
+				document.getElementById("divTrue/False").style.display = "none";
+				document.getElementById("divFill").style.display = "block";
+				document.getElementById("divEssay").style.display = "none";
+			}
+			else if (typeid == "Essay") {
+				document.getElementById("divMultipleChoice").style.display = "none";
+				document.getElementById("divTrue/False").style.display = "none";
+				document.getElementById("divFill").style.display = "none";
+				document.getElementById("divEssay").style.display = "block";
+			}else{
+				document.getElementById("divMultipleChoice").style.display = "none";
+				document.getElementById("divTrue/False").style.display = "none";
+				document.getElementById("divFill").style.display = "none";
+				document.getElementById("divEssay").style.display = "none";
+			}
+			
+		}
+		function checkifRadoihasValue(){
+			var radioButtons = document.getElementsByName('choice');
+
+			for (var i = 0; i < radioButtons.length; i++) {
+				if (radioButtons[i].checked) {
+					console.log('Selected value:', radioButtons[i].value);
+					return;
+				}
+			}
+
+			Swal.fire("Cancelled!", "Please check inputs and choose the correct option!", "error");
+
+			var choice4 = document.getElementById('choice4').value.trim();
+			if (choice4 == '') {
+				Swal.fire("Cancelled!", "Please Enter choice 4 !", "error");
+			}
+			var choice3 = document.getElementById('choice3').value.trim();
+			if (choice3 == '') {
+				Swal.fire("Cancelled!", "Please Enter choice 3 !", "error");
+			}
+			var choice2 = document.getElementById('choice2').value.trim();
+			if (choice2 == '') {
+				Swal.fire("Cancelled!", "Please Enter choice 2 !", "error");
+			}
+			var choice1 = document.getElementById('choice1').value.trim();
+			if (choice1 == '') {
+				Swal.fire("Cancelled!", "Please Enter choice 1 !", "error");
+			}
+		
+		
+		
+			var questionText = document.getElementById('questionText').value.trim();
+			if (questionText == '') {
+				Swal.fire("Cancelled!", "Please Enter Question Text !", "error");
+			}
+		}
+		function checkifRadoihasValueTF() {
+			var radioButtons = document.getElementsByName('inputtf');
+
+			for (var i = 0; i < radioButtons.length; i++) {
+				if (radioButtons[i].checked) {
+					console.log('Selected value:', radioButtons[i].value);
+					return;
+				}
+			}
+
+			Swal.fire("Cancelled!", "Please check inputs and select if question True or False!", "error");
+
+			var questionText = document.getElementById('questionTextTF').value.trim();
+			if (questionText == '') {
+				Swal.fire("Cancelled!", "Please Enter Question Text !", "error");
+			}
+		}
+		function checkValueFillBlank() {
+			var correctAnswertText = document.getElementById('correctAnswert').value.trim();
+			if (correctAnswertText == '') {
+				Swal.fire("Cancelled!", "Please Enter correct answert !", "error");
+			}
+			
+			var questionText = document.getElementById('questionTextFillBlank').value.trim();
+			if (questionText == '') {
+				Swal.fire("Cancelled!", "Please Enter Question Text !", "error");
+			}			
+			
+			const count = questionText.split("%%").length - 1;
+
+			console.log(count);
+			if (count === 1) {
+			
+			} else {
+				Swal.fire("Cancelled!", "The question must contain %% once !", "error");
+			}
+			
+		}
+		function checkValueEssay() {
+			var correctAnswertText = document.getElementById('correctAnswertEssay').value.trim();
+			if (correctAnswertText == '') {
+				Swal.fire("Cancelled!", "Please Enter correct answert !", "error");
+			}
+
+			var questionText = document.getElementById('questionTextEssay').value.trim();
+			if (questionText == '') {
+				Swal.fire("Cancelled!", "Please Enter Question Text !", "error");
+			}
+
+
+
+		}
+				
+	</script>
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+	<!-- switchery js -->
+	<script src="~/src/plugins/switchery/switchery.min.js"></script>
+	<!-- bootstrap-tagsinput js -->
+	<script src="~/src/plugins/bootstrap-tagsinput/bootstrap-tagsinput.js"></script>
+	<!-- bootstrap-touchspin js -->
+	<script src="~/src/plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.js"></script>
+	<script src="~/vendors/scripts/advanced-components.js"></script>
+
+}

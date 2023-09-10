@@ -1,0 +1,174 @@
+﻿@using Exam.Identity_Models
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Identity
+@*@model IEnumerable<IdentityRole>*@
+
+@model Exam.ViewModel.Identity_Models.AccountViewModels.PaginatedList<IdentityRole>
+@inject IAuthorizationService AuthorizationService
+@{
+    ViewData["Title"] = "Roles - Quarry";
+    int counter = 1;
+}
+
+@section css{
+    <link rel="stylesheet" type="text/css" href="~/src/plugins/datatables/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" type="text/css" href="~/src/plugins/datatables/css/dataTables.bootstrap4.min.css">
+    <style>
+        #DataTables_Table_0_filter, #DataTables_Table_0_wrapper > div.dt-buttons.btn-group.flex-wrap {
+            display: inline;
+            float: right;
+            margin: 10px;
+        }
+
+        #DataTables_Table_0_wrapper > div.dt-buttons.btn-group.flex-wrap {
+            display: inline;
+            float: left;
+            margin: 10px;
+        }
+    </style>
+}
+
+<div>
+    <div class="page-header">
+        <div class="row">
+            <div class="col-md-6 col-sm-12">
+                <div class="title">
+                    <h4>Roles</h4>
+                </div>
+                <nav aria-label="breadcrumb" role="navigation">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Roles</li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="col-md-6 col-sm-12 text-right">
+                <div class="dropdown">
+
+
+                    @if (AuthorizationService.AuthorizeAsync(User, Permissions.Roles.Create).Result.Succeeded)
+                    {
+                        <a class="btn btn-primary" asp-action="CreateRole" asp-controller="Administration">Add new role</a>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+
+@if (Model.Any())
+{
+
+    <div class="card-box mb-30">
+
+        <div class="pb-20">
+            <table class="table hover multiple-select-row data-table-export nowrap table-striped">
+                <thead style="background: #0b132b;color: #fff;">
+                    <tr>
+                        <th class="table-plus datatable-nosort">#</th>
+                        <th>Role</th>
+                        @if (AuthorizationService.AuthorizeAsync(User, Permissions.Roles.ManagePermissions).Result.Succeeded)
+                        {
+                            <th>
+                                Manage  Permissions
+                            </th>
+                        }
+                        @if (AuthorizationService.AuthorizeAsync(User, Permissions.Roles.Edit).Result.Succeeded)
+                        {
+                            <th>
+                                Edit
+                            </th>
+                        }
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var role in Model)
+                    {
+
+                        <tr>
+                            <td class="table-plus">
+                                @(counter++)
+                            </td>
+                            <td>
+                                @role.Name
+                            </td>
+                            @if (AuthorizationService.AuthorizeAsync(User, Permissions.Roles.ManagePermissions).Result.Succeeded)
+                            {
+                                <td>
+                                    <a class="btn btn-primary" asp-action="ManagePermissions" asp-route-roleId="@role.Id">Manage Permissions</a>
+                                </td>
+                            }
+                            @if (AuthorizationService.AuthorizeAsync(User, Permissions.Roles.Edit).Result.Succeeded)
+                            {
+                                <td>
+                                    <a asp-controller="Administration" asp-action="EditRole" asp-route-id="@role.Id" class="btn btn-primary">Edit</a>
+                                </td>
+                            }
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+   
+}
+else
+{
+    <div class="card">
+        <div class="card-header">
+            No roles created yet
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">
+                Use the button below to create a role
+            </h5>
+            @if (AuthorizationService.AuthorizeAsync(User, Permissions.Roles.Create).Result.Succeeded)
+            {
+                <a class="btn btn-primary" style="width:auto"
+                   asp-controller="administration" asp-action="CreateRole">
+                    Create Role
+                </a>
+            }
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+
+    <script>
+
+        document.getElementById("userssetting").click();
+        ToggleColorInDashboard("manageroles");
+
+    </script>
+    <script src="~/src/plugins/datatables/js/jquery.dataTables.min.js"></script>
+    <script src="~/src/plugins/datatables/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/src/plugins/datatables/js/dataTables.responsive.min.js"></script>
+    <script src="~/src/plugins/datatables/js/responsive.bootstrap4.min.js"></script>
+    <!-- buttons for Export datatable -->
+    <script src="~/src/plugins/datatables/js/dataTables.buttons.min.js"></script>
+    <script src="~/src/plugins/datatables/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/src/plugins/datatables/js/buttons.print.min.js"></script>
+    <script src="~/src/plugins/datatables/js/buttons.html5.min.js"></script>
+    <script src="~/src/plugins/datatables/js/buttons.flash.min.js"></script>
+    <script src="~/src/plugins/datatables/js/pdfmake.min.js"></script>
+    <script src="~/src/plugins/datatables/js/vfs_fonts.js"></script>
+    <!-- Datatable Setting js -->
+    <script src="~/vendors/scripts/datatable-setting.js"></script>
+
+}

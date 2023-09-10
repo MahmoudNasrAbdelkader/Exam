@@ -1,0 +1,83 @@
+﻿@model IQueryable<Exam.Data.Models.Exam>
+@{
+	ViewData["Title"] = "Exams";
+	Layout = "_LayoutExam";
+	int counter = 0;
+}
+@section css{
+	<link rel="stylesheet" type="text/css" href="vendors/styles/core.css">
+	<link rel="stylesheet" type="text/css" href="vendors/styles/icon-font.min.css">
+	<link rel="stylesheet" type="text/css" href="src/plugins/datatables/css/dataTables.bootstrap4.min.css">
+	<link rel="stylesheet" type="text/css" href="src/plugins/datatables/css/responsive.bootstrap4.min.css">
+	<link rel="stylesheet" type="text/css" href="vendors/styles/style.css">
+}
+
+
+<div class="card-box mb-30">
+	<div class="pd-20">
+		<h4 class="text-blue h4">Exams</h4>
+	</div>
+	<div class="pb-20">
+		<table class="table hover multiple-select-row data-table-export nowrap">
+			<thead>
+				<tr>
+					<th class="table-plus datatable-nosort">#</th>
+					<th class="table-plus datatable-nosort">Name</th>
+					<th>Create DT</th>
+					<th></th>
+
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var item in Model)
+				{
+					counter++;
+					<tr>
+
+						<td class="table-plus">
+							@counter
+						</td>
+						<td class="table-plus">  @item.Name</td>
+						<td>  @item.CreateDT.ToString("dd/MM/yyyy HH:mm tt")</td>
+						<td>
+							<a class="btn btn-primary" asp-action="StartExam" asp-controller="Exam" asp-route-ExamId="@item.ExamId">
+								Start
+							</a>
+						</td>
+					</tr>
+
+				}
+
+
+			</tbody>
+		</table>
+	</div>
+</div>
+
+@section Scripts{
+
+	<script src="src/plugins/datatables/js/jquery.dataTables.min.js"></script>
+	<script src="src/plugins/datatables/js/dataTables.bootstrap4.min.js"></script>
+	<script src="src/plugins/datatables/js/dataTables.responsive.min.js"></script>
+	<script src="src/plugins/datatables/js/responsive.bootstrap4.min.js"></script>
+	<!-- buttons for Export datatable -->
+	<script src="src/plugins/datatables/js/dataTables.buttons.min.js"></script>
+	<script src="src/plugins/datatables/js/buttons.bootstrap4.min.js"></script>
+	<script src="src/plugins/datatables/js/buttons.print.min.js"></script>
+	<script src="src/plugins/datatables/js/buttons.html5.min.js"></script>
+	<script src="src/plugins/datatables/js/buttons.flash.min.js"></script>
+	<script src="src/plugins/datatables/js/pdfmake.min.js"></script>
+	<script src="src/plugins/datatables/js/vfs_fonts.js"></script>
+	<!-- Datatable Setting js -->
+	<script src="vendors/scripts/datatable-setting.js"></script>
+	<script>
+
+
+		$(document).ready(function () {
+			document.getElementById("aStudent").click();
+			ToggleColorInDashboard("aStartExam");
+
+		});
+	</script>
+}
+

@@ -1,0 +1,321 @@
+﻿@model Exam.ViewModel.UserExamViewModel
+@{
+	ViewData["Title"] = "Start - Exam";
+	Layout = "_LayoutExam";
+
+}
+@section css{
+	<!-- switchery css -->
+	<link rel="stylesheet" type="text/css" href="~/src/plugins/switchery/switchery.min.css">
+	<!-- bootstrap-tagsinput css -->
+	<link rel="stylesheet" type="text/css" href="~/src/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css">
+	<!-- bootstrap-touchspin css -->
+	<link rel="stylesheet" type="text/css" href="~/src/plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.css">
+}
+
+<div>
+	<div class="page-header">
+		<div class="row">
+			<div class="col-md-12 col-sm-12">
+				<div class="title">
+					<nav aria-label="breadcrumb" role="navigation">
+						<ol class="breadcrumb">
+							<li class="breadcrumb-item"><a asp-action="ExamsForStudent" asp-controller="Exam">Exams</a></li>
+							<li class="breadcrumb-item active" aria-current="page">@Model.Exam.Name</li>
+
+						</ol>
+					</nav>
+					<span class="text-danger">You need to click the save button after each answer, otherwise the answer will not be saved.</span>
+				</div>
+
+			</div>
+		
+		</div>
+	</div>
+
+
+	<div class="pd-20 card-box mb-30">
+
+		@foreach (var item in Model.UserAnswers)
+		{
+			if (item.Question.QuestionType.Text.Contains("Multiple Choice"))
+			{
+				<div>
+
+					<input type="hidden" value="@item.AnswerId" id="@item.AnswerId" />
+						
+
+						<div class="row">
+							<div class="col-md-12 col-sm-12">
+								<div class="form-group">
+								<label class="form-control-label">Multiple Choice</label>
+									<input name="questionText" id="questionText" value="@item.Question.Text" type="text" class="form-control" required disabled>
+
+								</div>
+
+							</div>
+
+						</div>
+						<div class="row">
+							<div class="col-md-9">
+								<div class="form-group">
+									<label class="form-control-label">A</label>
+								<input   type="text" class="form-control" value="@item.Question.QuestionChoose[0].Text" required disabled>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label class="form-control-label">Answer</label>
+								<input type="radio" name="choice @item.AnswerId" value="@item.Question.QuestionChoose[0].Text" class="form-control" style=" width: 10%;" required>
+								</div>
+							</div>
+
+						</div>
+				     	<div class="row">
+						<div class="col-md-9">
+							<div class="form-group">
+								<label class="form-control-label">B</label>
+								<input type="text" class="form-control" value="@item.Question.QuestionChoose[1].Text" required disabled>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+								<label class="form-control-label">Correct answer</label>
+								<input type="radio" name="choice @item.AnswerId" value="@item.Question.QuestionChoose[1].Text" class="form-control" style=" width: 10%;" required>
+							</div>
+						</div>
+
+					</div>
+			     		<div class="row">
+						<div class="col-md-9">
+							<div class="form-group">
+								<label class="form-control-label">C</label>
+								<input type="text" class="form-control" value="@item.Question.QuestionChoose[2].Text" required disabled>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+								<label class="form-control-label">Correct answer</label>
+								<input type="radio" name="choice @item.AnswerId" value="@item.Question.QuestionChoose[2].Text" class="form-control" style=" width: 10%;" required>
+							</div>
+						</div>
+
+					</div>
+				     	<div class="row">
+						<div class="col-md-9">
+							<div class="form-group">
+								<label class="form-control-label">D</label>
+								<input type="text" class="form-control" value="@item.Question.QuestionChoose[3].Text" required disabled>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+								<label class="form-control-label">Correct answer</label>
+								<input type="radio" name="choice @item.AnswerId" value="@item.Question.QuestionChoose[3].Text" class="form-control" style=" width: 10%;" required>
+							</div>
+						</div>
+
+					</div>
+					    <div class="form-group text-right">
+						<input type="submit" class="btn btn-primary" onclick="saveAnswer('@item.AnswerId','Multiple Choice')" style="width: 150px;" value="Save" />
+						</div>
+
+				
+				</div>
+				<hr />
+			}
+			else if (item.Question.QuestionType.Text.Contains("True/False"))
+			{
+				<div>
+					<div class="row">
+						<div class="col-md-12 col-sm-12">
+							<div class="form-group">
+								<label class="form-control-label">True/False</label>
+								<input  value="@item.Question.Text" type="text" class="form-control" required disabled>
+
+							</div>
+
+						</div>
+
+					</div>
+					<div class="row">
+						<div class="col-md-9">
+							<div class="form-group">
+								<input type="radio" name="inputtf @item.AnswerId" value="True" required>True
+								<input type="radio" name="inputtf @item.AnswerId" value="False">False
+							</div>
+						</div>
+
+
+					</div>
+
+					<div class="form-group text-right">
+						<input type="submit" class="btn btn-primary" onclick="saveAnswer('@item.AnswerId','True/False')" style="width: 150px;" value="Save" />
+					</div>
+				</div>
+				<hr />
+			}
+			else if (item.Question.QuestionType.Text.Contains("Fill in the blank"))
+			{
+				
+				<div>
+					<div class="row">
+						<div class="col-md-12 col-sm-12">
+							<div class="form-group">
+								<label class="form-control-label">Fill in the blank</label>
+								<div id="content @item.AnswerId">@item.Question.Text</div>
+
+								<script>
+									var contentElement = document.getElementById("content @item.AnswerId");
+									var originalString = contentElement.innerHTML;
+									var replacedString = originalString.replace(/%%/g, '<input type="text" id="fill @item.AnswerId">');
+									contentElement.innerHTML = replacedString;
+								</script>
+							</div>
+
+						</div>
+
+					</div>
+					
+
+					<div class="form-group text-right">
+						<input type="submit" class="btn btn-primary" onclick="saveAnswer('@item.AnswerId','Fill in the blank')" style="width: 150px;" value="Save" />
+					</div>
+				</div>
+				<hr />
+			}
+			else if (item.Question.QuestionType.Text.Contains("Essay"))
+			{
+				
+				<div class="row">
+					<div class="col-md-12 col-sm-12">
+						<div class="form-group">
+							<label class="form-control-label">Essay </label>
+							<input name="questionText" id="questionTextEssay" value="@item.Question.Text" type="text" class="form-control" required disabled>
+
+						</div>
+
+					</div>
+
+				</div>
+				<div class="row">
+					<div class="col-md-9">
+						<div class="form-group">
+							<label class="form-control-label">Answert</label>
+							<input name="correctAnswert" id="answertEssay @item.AnswerId" type="text" class="form-control" required>
+						</div>
+					</div>
+
+
+				</div>
+
+				<div class="form-group text-right">
+					<input type="submit" class="btn btn-primary" onclick="saveAnswer('@item.AnswerId','Essay')" style="width: 150px;" value="Save" />
+				</div>
+				<hr />
+			}
+		}
+	</div>
+</div>
+<div class="form-group text-right">
+	<a class="btn btn-primary" asp-action="EndExam" asp-controller="Exam" asp-route-UserExamId="@Model.UserAnswers.FirstOrDefault()?.UserExamId">
+		End Exam
+	</a>
+</div>
+
+
+@section Scripts{
+	<script>
+
+
+		$(document).ready(function () {
+			document.getElementById("aStudent").click();
+			ToggleColorInDashboard("aStartExam");
+			
+
+		});
+
+		function saveAnswer(answerId ,typeName)
+		{
+			var selectedValue;
+			if (typeName == "Multiple Choice") {
+				// Get all radio buttons with the specified name
+				var radioButtons = document.getElementsByName("choice " + answerId);
+
+				// Loop through the radio buttons to find the selected one
+
+				for (var i = 0; i < radioButtons.length; i++) {
+					if (radioButtons[i].checked) {
+						selectedValue = radioButtons[i].value;
+						break;
+					}
+				}
+
+			}
+			else if (typeName == "True/False") {
+				var radioButtons = document.getElementsByName("inputtf " + answerId);
+
+				// Loop through the radio buttons to find the selected one
+
+				for (var i = 0; i < radioButtons.length; i++) {
+					if (radioButtons[i].checked) {
+						selectedValue = radioButtons[i].value;
+						break;
+					}
+				}
+
+			}
+			else if (typeName == "Fill in the blank")
+			{
+				selectedValue = document.getElementById("fill " + answerId).value;
+			}
+			else if (typeName == "Essay")
+			{
+				selectedValue = document.getElementById("answertEssay " + answerId).value;
+
+			}
+			console.log(answerId + " - " + selectedValue);
+
+			if (selectedValue !== null && selectedValue !== undefined && selectedValue !== '')
+			{
+				$.ajax({
+					type: "Post",
+					url: "/Exam/SaveAnswer",
+					data: { "AnswerId": answerId, "AnswerValue": selectedValue, "QuestionType": typeName },
+					success: function (response) {
+						if (response > 0) {
+							Swal.fire('Saved!', 'Your answer has been saved.', 'success');
+						
+						} else if (response == 0) {
+							Swal.fire("Cancelled!", "Oops Something went wrong!", "error");
+						}
+
+					},
+					failure: function (response) {
+						Swal.fire("Cancelled!", "Error", "error");
+					},
+					error: function (response) {
+						Swal.fire("Cancelled!", "Error", "error");
+					}
+				})
+
+			}else{
+				Swal.fire("Cancelled!", "Oops Something went wrong!", "error");
+			}
+		}
+
+	</script>
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+	<!-- switchery js -->
+	<script src="~/src/plugins/switchery/switchery.min.js"></script>
+	<!-- bootstrap-tagsinput js -->
+	<script src="~/src/plugins/bootstrap-tagsinput/bootstrap-tagsinput.js"></script>
+	<!-- bootstrap-touchspin js -->
+	<script src="~/src/plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.js"></script>
+	<script src="~/vendors/scripts/advanced-components.js"></script>
+
+}
+
+

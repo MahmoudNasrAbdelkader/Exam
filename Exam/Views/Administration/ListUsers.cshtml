@@ -1,0 +1,191 @@
+﻿@using Exam.Identity_Models;
+@using Exam.ViewModel.Identity_Models
+@using Microsoft.AspNetCore.Authorization
+@*@model IEnumerable<ApplicationUser>*@
+
+@*@model PaginatedList<Task<Users_in_Role_ViewModel>>*@
+@model IEnumerable<Task< Exam.Identity_Models.Users_in_Role_ViewModel>>
+@inject IAuthorizationService AuthorizationService
+@{
+    ViewData["Title"] = "Users - Quarry";
+    int counter = 1;
+}
+@section css{
+    <link rel="stylesheet" type="text/css" href="~/src/plugins/datatables/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" type="text/css" href="~/src/plugins/datatables/css/dataTables.bootstrap4.min.css">
+    <style>
+        #DataTables_Table_0_filter, #DataTables_Table_0_wrapper > div.dt-buttons.btn-group.flex-wrap {
+            display: inline;
+            float: right;
+            margin: 10px;
+        }
+
+        #DataTables_Table_0_wrapper > div.dt-buttons.btn-group.flex-wrap {
+            display: inline;
+            float: left;
+            margin: 10px;
+        }
+    </style>
+}
+
+
+
+
+<div>
+    <div class="page-header">
+        <div class="row">
+            <div class="col-md-6 col-sm-12">
+                <div class="title">
+                    <h4>Users</h4>
+                </div>
+                <nav aria-label="breadcrumb" role="navigation">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Users</li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="col-md-6 col-sm-12 text-right">
+                <div class="dropdown">
+
+                    @if (AuthorizationService.AuthorizeAsync(User, Permissions.Users.Create).Result.Succeeded)
+                    {
+                        <a asp-action="Register" asp-controller="Account"
+                           class="btn btn-primary">
+                            Add New User
+                        </a>
+                    }
+                    @if (AuthorizationService.AuthorizeAsync(User, Permissions.Roles.View).Result.Succeeded)
+                    {
+                        <a asp-action="ListRoles" asp-controller="Administration"
+                           class="btn btn-primary">
+                            Manage Roles & Permissions
+                        </a>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="card-box mb-30">
+
+    <div class="pb-20">
+        <table class="table hover multiple-select-row data-table-export nowrap table-striped">
+            <thead style="background: #0b132b;color: #fff;">
+                <tr>
+                    <th class="table-plus datatable-nosort">#</th>
+                    <th>UserName</th>
+                    <th>FirstName</th>
+                    <th>Email Year</th>
+                    <th> Role</th>
+                    @if (AuthorizationService.AuthorizeAsync(User, Permissions.Users.Edit).Result.Succeeded)
+                    {
+                        <th>
+                            Edit
+                        </th>
+                    }
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model)
+                {
+
+                    <tr>
+                        <td class="table-plus">
+                            @(counter++)
+                        </td>
+                        <td>
+                            @user.Result.Username
+                        </td>
+                        <td>
+                            @user.Result.FirstName
+                        </td>
+
+                        <td>
+                            @user.Result.Email
+                        </td>
+                        <td>
+                            @user.Result.Role
+                        </td>
+                        @if (AuthorizationService.AuthorizeAsync(User, Permissions.Users.Edit).Result.Succeeded)
+                        {
+                            <td>
+                                <a asp-action="EditUser" asp-controller="Administration"
+                                   asp-route-id="@user.Result.UserId" class="btn btn-primary">Edit</a>
+                            </td>
+                        }
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            document.getElementById("userssetting").click();
+            ToggleColorInDashboard("manageusers");
+            // Setup - add a text input to each footer cell
+            $('#example tfoot th').each(function () {
+                var title = $(this).text();
+                $(this).html('<input type="text" style="text-align:center" placeholder="Search ' + title + '" />');
+            });
+
+            // DataTable
+            var table = $('#example').DataTable({
+                initComplete: function () {
+                    var r = $('#example tfoot tr');
+                    r.find('th').each(function () {
+                        $(this).css('padding', 8);
+                    });
+                    $('#example thead').append(r);
+                    $('#search_0').css('text-align', 'center');
+                    // Apply the search
+                    this.api().columns().every(function () {
+                        var that = this;
+
+                        $('input', this.footer()).on('keyup change clear', function () {
+                            if (that.search() !== this.value) {
+                                that
+                                    .search(this.value)
+                                    .draw();
+                            }
+                        });
+                    });
+
+                }
+            });
+
+
+        });
+    </script>
+    <script src="~/src/plugins/datatables/js/jquery.dataTables.min.js"></script>
+    <script src="~/src/plugins/datatables/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/src/plugins/datatables/js/dataTables.responsive.min.js"></script>
+    <script src="~/src/plugins/datatables/js/responsive.bootstrap4.min.js"></script>
+    <!-- buttons for Export datatable -->
+    <script src="~/src/plugins/datatables/js/dataTables.buttons.min.js"></script>
+    <script src="~/src/plugins/datatables/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/src/plugins/datatables/js/buttons.print.min.js"></script>
+    <script src="~/src/plugins/datatables/js/buttons.html5.min.js"></script>
+    <script src="~/src/plugins/datatables/js/buttons.flash.min.js"></script>
+    <script src="~/src/plugins/datatables/js/pdfmake.min.js"></script>
+    <script src="~/src/plugins/datatables/js/vfs_fonts.js"></script>
+    <!-- Datatable Setting js -->
+    <script src="~/vendors/scripts/datatable-setting.js"></script>
+
+}
+
